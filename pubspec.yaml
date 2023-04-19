@@ -8,6 +8,7 @@ environment:
 
 dependencies:
   arcore_flutter_plugin: ^0.2.0-alpha
+  vector_math: ^2.1.4
   flutter:
     sdk: flutter
 

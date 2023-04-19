@@ -1,5 +1,6 @@
 import 'package:arcore_flutter_plugin/arcore_flutter_plugin.dart';
 import 'package:flutter/material.dart';
+import 'package:vector_math/vector_math_64.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -69,6 +70,7 @@ class _ARCoreViewState extends State<ARCoreView> {
         object3DFileName: 'assets/models/free_animals_-_quirky_series.glb',
         position: hit.pose.translation,
         rotation: hit.pose.rotation,
+        scale: Vector3(0.1, 0.1, 0.1),
       );
 
       print('Adding object: ${node.name} from file: ${node.object3DFileName}');
