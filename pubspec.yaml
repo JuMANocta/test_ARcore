@@ -7,7 +7,7 @@ environment:
   sdk: '>=3.0.0-400.0.dev <4.0.0'
 
 dependencies:
-  arcore_flutter_plugin: ^0.1.0
+  arcore_flutter_plugin: ^0.2.0-alpha
   flutter:
     sdk: flutter
 
@@ -18,3 +18,7 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/models/porche/scene.gltf
+    - assets/models/free_1975_porsche_911_930_turbo.glb
+    - assets/models/free_animals_-_quirky_series.glb
