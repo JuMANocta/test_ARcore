@@ -60,25 +60,64 @@ class _ARCoreViewState extends State<ARCoreView> {
   void _onPlaneTap(List<ArCoreHitTestResult> hits) {
     final hit = hits.first;
     print('Plane tapped: ${hit.pose.translation}');
-    _addObject(hit);
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return FutureBuilder<bool>(
+          future: _addObject(hit),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const AlertDialog(
+                content: CircularProgressIndicator(),
+              );
+            } else if (snapshot.hasError ||
+                !snapshot.hasData ||
+                !snapshot.data!) {
+              return AlertDialog(
+                content: const Text('Error adding object'),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: const Text('OK'),
+                  ),
+                ],
+              );
+            } else {
+              return AlertDialog(
+                content: const Text('Object added successfully'),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: const Text('OK'),
+                  ),
+                ],
+              );
+            }
+          },
+        );
+      },
+    );
   }
 
-  Future<void> _addObject(ArCoreHitTestResult hit) async {
+  Future<bool> _addObject(ArCoreHitTestResult hit) async {
     try {
       final node = ArCoreReferenceNode(
         name: 'Porche',
-        object3DFileName: 'assets/models/free_animals_-_quirky_series.glb',
+        object3DFileName: 'free_animals_-_quirky_series.glb',
         position: hit.pose.translation,
         rotation: hit.pose.rotation,
-        scale: Vector3(0.1, 0.1, 0.1),
+        scale: Vector3(0.01, 0.01, 0.01),
       );
 
       print('Adding object: ${node.name} from file: ${node.object3DFileName}');
 
-      arCoreController.addArCoreNodeWithAnchor(node);
+      await arCoreController.addArCoreNodeWithAnchor(node);
       print('Object added successfully');
+      return true;
     } catch (e) {
       print('Error adding object: $e');
+      return false;
     }
   }
 }
