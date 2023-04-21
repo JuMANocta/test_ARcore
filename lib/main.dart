@@ -8,6 +8,7 @@ void main() async {
   print(await ArCoreController.checkArCoreAvailability());
   print('\nAR SERVICES INSTALLED?');
   print(await ArCoreController.checkIsArCoreInstalled());
+
   runApp(const MainApp());
 }
 
@@ -44,6 +45,7 @@ class _ARCoreViewState extends State<ARCoreView> {
       onArCoreViewCreated: _onARCoreViewCreated,
       enableTapRecognizer: true,
       enableUpdateListener: true,
+      debug: true,
     );
   }
 
@@ -104,7 +106,7 @@ class _ARCoreViewState extends State<ARCoreView> {
     try {
       final node = ArCoreReferenceNode(
         name: 'Porche',
-        object3DFileName: 'free_animals_-_quirky_series.glb',
+        object3DFileName: '_nom.glb',
         position: hit.pose.translation,
         rotation: hit.pose.rotation,
         scale: Vector3(0.01, 0.01, 0.01),
