@@ -1,6 +1,9 @@
 import 'package:arcore_flutter_plugin/arcore_flutter_plugin.dart';
 import 'package:flutter/material.dart';
-import 'package:vector_math/vector_math_64.dart';
+// import 'package:http/http.dart' as http;
+// import 'dart:io';
+// import 'package:path_provider/path_provider.dart';
+//import 'package:vector_math/vector_math_64.dart' as vector;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -44,8 +47,6 @@ class _ARCoreViewState extends State<ARCoreView> {
     return ArCoreView(
       onArCoreViewCreated: _onARCoreViewCreated,
       enableTapRecognizer: true,
-      enableUpdateListener: true,
-      debug: true,
     );
   }
 
@@ -62,64 +63,46 @@ class _ARCoreViewState extends State<ARCoreView> {
   void _onPlaneTap(List<ArCoreHitTestResult> hits) {
     final hit = hits.first;
     print('Plane tapped: ${hit.pose.translation}');
-
-    showDialog(
-      context: context,
-      builder: (context) {
-        return FutureBuilder<bool>(
-          future: _addObject(hit),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const AlertDialog(
-                content: CircularProgressIndicator(),
-              );
-            } else if (snapshot.hasError ||
-                !snapshot.hasData ||
-                !snapshot.data!) {
-              return AlertDialog(
-                content: const Text('Error adding object'),
-                actions: [
-                  TextButton(
-                    onPressed: () => Navigator.pop(context),
-                    child: const Text('OK'),
-                  ),
-                ],
-              );
-            } else {
-              return AlertDialog(
-                content: const Text('Object added successfully'),
-                actions: [
-                  TextButton(
-                    onPressed: () => Navigator.pop(context),
-                    child: const Text('OK'),
-                  ),
-                ],
-              );
-            }
-          },
-        );
-      },
-    );
+    _addObject(hit);
   }
 
-  Future<bool> _addObject(ArCoreHitTestResult hit) async {
+  Future<bool> _addObject(ArCoreHitTestResult plane) async {
     try {
+      // const url = "https://github.com/KhronosGroup/glTF-Sample-Models/raw/master/2.0/Duck/glTF-Binary/Duck.glb";
+      // const fileName = "Duck.glb";
+      // final localPath = await downloadAndSaveModel(url, fileName);
+
       final node = ArCoreReferenceNode(
-        name: 'Porche',
-        object3DFileName: '_nom.glb',
-        position: hit.pose.translation,
-        rotation: hit.pose.rotation,
-        scale: Vector3(0.01, 0.01, 0.01),
-      );
+          name: 'test', //fileName,
+          //object3DFileName: 'free_animals_-_quirky_series.glb',//localPath,
+          objectUrl:
+              "https://github.com/KhronosGroup/glTF-Sample-Models/raw/master/2.0/Duck/glTF-Binary/Duck.glb",
+          position: plane.pose.translation,
+          rotation: plane.pose.rotation);
 
       print('Adding object: ${node.name} from file: ${node.object3DFileName}');
 
-      await arCoreController.addArCoreNodeWithAnchor(node);
+      await arCoreController.addArCoreNode(node);
       print('Object added successfully');
       return true;
-    } catch (e) {
+    } catch (e, stackTrace) {
       print('Error adding object: $e');
+      print('Stack trace: $stackTrace');
       return false;
     }
   }
+
+  // Future<String> downloadAndSaveModel(String url, String fileName) async {
+  //   final response = await http.get(Uri.parse(url));
+
+  //   if (response.statusCode == 200) {
+  //     final directory = await getApplicationDocumentsDirectory();
+  //     final filePath = '${directory.path}/$fileName';
+  //     final file = File(filePath);
+  //     await file.writeAsBytes(response.bodyBytes);
+  //     return filePath;
+  //   } else {
+  //     throw Exception('Failed to download model');
+  //   }
+  // }
 }
