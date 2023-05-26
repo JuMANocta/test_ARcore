@@ -1,17 +1,7 @@
 import 'package:arcore_flutter_plugin/arcore_flutter_plugin.dart';
 import 'package:flutter/material.dart';
-// import 'package:http/http.dart' as http;
-// import 'dart:io';
-// import 'package:path_provider/path_provider.dart';
-//import 'package:vector_math/vector_math_64.dart' as vector;
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  print('ARCORE IS AVAILABLE?');
-  print(await ArCoreController.checkArCoreAvailability());
-  print('\nAR SERVICES INSTALLED?');
-  print(await ArCoreController.checkIsArCoreInstalled());
-
   runApp(const MainApp());
 }
 
@@ -68,15 +58,10 @@ class _ARCoreViewState extends State<ARCoreView> {
 
   Future<bool> _addObject(ArCoreHitTestResult plane) async {
     try {
-      // const url = "https://github.com/KhronosGroup/glTF-Sample-Models/raw/master/2.0/Duck/glTF-Binary/Duck.glb";
-      // const fileName = "Duck.glb";
-      // final localPath = await downloadAndSaveModel(url, fileName);
-
       final node = ArCoreReferenceNode(
-          name: 'test', //fileName,
-          //object3DFileName: 'free_animals_-_quirky_series.glb',//localPath,
-          objectUrl:
-              "https://github.com/KhronosGroup/glTF-Sample-Models/raw/master/2.0/Duck/glTF-Binary/Duck.glb",
+          name: 'quirky_series',
+          object3DFileName: 'assets/quirky_series.glb',
+          //objectUrl: "https://github.com/JuMANocta/test_ARcore/raw/master/assets/free_animals_-_quirky_series.glb",
           position: plane.pose.translation,
           rotation: plane.pose.rotation);
 
@@ -91,18 +76,4 @@ class _ARCoreViewState extends State<ARCoreView> {
       return false;
     }
   }
-
-  // Future<String> downloadAndSaveModel(String url, String fileName) async {
-  //   final response = await http.get(Uri.parse(url));
-
-  //   if (response.statusCode == 200) {
-  //     final directory = await getApplicationDocumentsDirectory();
-  //     final filePath = '${directory.path}/$fileName';
-  //     final file = File(filePath);
-  //     await file.writeAsBytes(response.bodyBytes);
-  //     return filePath;
-  //   } else {
-  //     throw Exception('Failed to download model');
-  //   }
-  // }
 }

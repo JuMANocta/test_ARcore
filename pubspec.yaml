@@ -1,25 +1,25 @@
 name: testarcore
 description: A new Flutter project.
 publish_to: 'none'
-version: 0.1.0
+
+version: 1.0.0+1
 
 environment:
-  sdk: '>=3.0.0-400.0.dev <4.0.0'
+  sdk: '>=3.1.0-136.0.dev <4.0.0'
 
 dependencies:
-  arcore_flutter_plugin: any
-  vector_math: any
-  path_provider: any
-  http: any
+  arcore_flutter_plugin: ^0.2.0-alpha
   flutter:
     sdk: flutter
+  cupertino_icons: ^1.0.2
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: any
+  flutter_lints: ^2.0.0
 
 flutter:
   uses-material-design: true
+
   assets:
-    - assets/
+    - assets/quirky_series.glb
