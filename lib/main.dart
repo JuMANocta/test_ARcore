@@ -1,6 +1,22 @@
 import 'package:arcore_flutter_plugin/arcore_flutter_plugin.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:vector_math/vector_math_64.dart' as vector;
+import 'dart:math';
+
+final List<String> liens = [
+  'https://github.com/JuMANocta/test_ARcore/raw/master/assets/porsche.glb',
+  'https://github.com/JuMANocta/test_ARcore/raw/master/assets/lamborghini.glb',
+  'https://github.com/JuMANocta/test_ARcore/raw/master/assets/porsche_carrera.glb',
+  'https://github.com/JuMANocta/test_ARcore/raw/master/assets/quirky_series.glb',
+];
+
+final Random random = Random();
+
+String obtenirLienAleatoire() {
+  final int indexAleatoire = random.nextInt(liens.length);
+  return liens[indexAleatoire];
+}
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -83,12 +99,17 @@ class _ARCoreViewState extends State<ARCoreView> {
   Future<bool> _addObject(ArCoreHitTestResult plane) async {
     try {
       final node = ArCoreReferenceNode(
-          name: 'test',
-          //object3DFileName: 'assets/porsche.obj',
-          //objectUrl: "https://github.com/JuMANocta/test_ARcore/raw/master/assets/quirky_series.glb",
-          objectUrl: "https://github.com/JuMANocta/test_ARcore/raw/master/assets/quirky_series.glb",
-          position: plane.pose.translation,
-          rotation: plane.pose.rotation);
+        name: 'test',
+        //object3DFileName: 'assets/porsche.obj',
+        //objectUrl: "https://github.com/JuMANocta/test_ARcore/raw/master/assets/porsche.glb",
+        //objectUrl: "https://github.com/JuMANocta/test_ARcore/raw/master/assets/lamborghini.glb",
+        //objectUrl: "https://github.com/JuMANocta/test_ARcore/raw/master/assets/porsche_carrera.glb",
+        //objectUrl: "https://github.com/JuMANocta/test_ARcore/raw/master/assets/quirky_series.glb",
+        objectUrl: obtenirLienAleatoire(),
+        position: plane.pose.translation,
+        rotation: plane.pose.rotation,
+        scale: vector.Vector3(0.5, 0.5, 0.5),
+      );
 
       print('Adding object: ${node.name} from file: ${node.object3DFileName}');
 
