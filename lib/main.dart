@@ -1,8 +1,32 @@
 import 'package:arcore_flutter_plugin/arcore_flutter_plugin.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 void main() async {
-  runApp(const MainApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  if (await checkFileExists()) {
+    runApp(const MainApp());
+  } else {
+    runApp(const MaterialApp(
+      home: Scaffold(
+        body: Center(
+          child: Text('File does not exist'),
+        ),
+      ),
+    ));
+  }
+}
+
+Future<bool> checkFileExists() async {
+  const String fileName = 'assets/quirky_series.glb';
+  try {
+    await rootBundle.load(fileName);
+    print('File exists');
+    return true;
+  } catch (e) {
+    print('File does not exist ' + e.toString());
+    return false;
+  }
 }
 
 class MainApp extends StatelessWidget {
@@ -59,9 +83,10 @@ class _ARCoreViewState extends State<ARCoreView> {
   Future<bool> _addObject(ArCoreHitTestResult plane) async {
     try {
       final node = ArCoreReferenceNode(
-          name: 'quirky_series',
-          object3DFileName: 'assets/quirky_series.glb',
-          //objectUrl: "https://github.com/JuMANocta/test_ARcore/raw/master/assets/free_animals_-_quirky_series.glb",
+          name: 'test',
+          //object3DFileName: 'assets/porsche.obj',
+          //objectUrl: "https://github.com/JuMANocta/test_ARcore/raw/master/assets/quirky_series.glb",
+          objectUrl: "https://github.com/JuMANocta/test_ARcore/raw/master/assets/quirky_series.glb",
           position: plane.pose.translation,
           rotation: plane.pose.rotation);
 
